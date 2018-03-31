@@ -1,0 +1,21 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+name = "pypi"
+verify_ssl = true
+
+
+[packages]
+
+sanic = "*"
+asyncpg = "*"
+"sanic-jinja2" = "*"
+
+
+[requires]
+
+python_version = "3.6"
+
+
+[dev-packages]
+

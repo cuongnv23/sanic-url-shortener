@@ -1,0 +1,31 @@
+version: '2'
+services:
+    nginx:
+        build:
+            context: .
+            dockerfile: nginx.Dockerfile
+        ports:
+            - "8888:80"
+        links:
+            - app
+    app:
+        build:
+            context: ./app/
+        expose:
+            - "8000"
+        links:
+            - postgres
+        env_file:
+            - ./.env
+        depends_on:
+            - postgres
+
+    postgres:
+        build:
+            context: ./sql/
+        env_file:
+            - ./.env
+        volumes:
+            - ./pg:/var/lib/postgres/data/
+        expose:
+            - "5432"

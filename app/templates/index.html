@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+  <h3>Yet another URL shortener</h3>
+</div>
+
+<br>
+
+<form action="/" method="POST">
+  <div class="form-group">
+    <input name="url" class="form-control input-lg" type="url" placeholder="Enter a url, must start with scheme (http or https)" required>
+  </div>
+  <input type="submit" class="btn btn-primary btn-lg btn-block" value="Submit">
+</form>
+
+<br>
+<hr>
+
+<div>
+    <table class="table">
+  <thead class="thead-light">
+    <tr>
+      <th scope="col">Original URL</th>
+      <th scope="col">Created</th>
+      <th scope="col">Short URL</th>
+    </tr>
+  </thead>
+  {% for link in links %}
+  {% set url = url_for('redirect', url=link.short_url, _external=True, _server=request.host) %}
+    <tbody>
+    <tr>
+      <td><a href="{{url}}">{{link.original_url}}</a></td>
+      <td>{{link.created_at}}</td>
+      <td><a href="{{url}}">{{url}}</a></td>
+    </tr>
+  </tbody>
+<!--     <h4 class="well"><a href="{{url}}"> {{url}} </a></h4>
+ -->  {% endfor %}
+</div>
+
+{% endblock %}

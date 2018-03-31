@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="text-center">
+  <h4>Your shorten URL</h4>
+</div>
+
+<hr>
+<div class="alert alert-primary" role="alert">
+    {% set url = url_for('redirect', url=url, _external=True, _server=request.host) %}
+    <a href="{{url}}"> {{url}} </a>
+</div>
+
+{% endblock %}
