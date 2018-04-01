@@ -46,6 +46,13 @@ This app uses [pipenv](https://github.com/pypa/pipenv) to manage virtualenv. Go 
 $ cd app
 $ pipenv install
 $ pipenv shell # run app inside virtualenv
+
+```
+
+Run the app
+
+```
+$ POSTGRES_USER=url POSTGRES_PASSWORD=secret DEBUG=True python app.py
 ```
 
 ### License
