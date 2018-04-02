@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app
+spec:
+  selector:
+    matchLabels:
+      app: app
+      tier: backend
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: app
+        tier: backend
+    spec:
+      containers:
+        - name: app
+          image: "cuongnv23/url-shortener-app:latest"
+          ports:
+            - name: sanic
+              containerPort: 8000
+          envFrom:
+            - configMapRef:
+                name: url-config

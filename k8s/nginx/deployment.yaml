@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx
+spec:
+  selector:
+    matchLabels:
+      app: nginx
+      tier: proxy
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: nginx
+        tier: proxy
+    spec:
+      containers:
+        - name: url-shortener-nginx
+          image: "cuongnv23/url-shortener-nginx:latest"
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/
+              name: default
+      volumes:
+        - name: default
+          configMap:
+            name: nginx
+            items:
+              - key: default
+                path: default.conf
