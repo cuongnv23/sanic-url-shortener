@@ -17,6 +17,7 @@ spec:
       containers:
         - name: url-shortener-nginx
           image: "cuongnv23/url-shortener-nginx:latest"
+          imagePullPolicy: IfNotPresent
           volumeMounts:
             - mountPath: /etc/nginx/conf.d/
               name: default

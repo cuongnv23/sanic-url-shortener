@@ -17,9 +17,16 @@ spec:
       containers:
         - name: app
           image: "cuongnv23/url-shortener-app:latest"
+          imagePullPolicy: IfNotPresent
           ports:
             - name: sanic
               containerPort: 8000
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 3
           env:
             - name: POSTGRES_USER
               valueFrom:
