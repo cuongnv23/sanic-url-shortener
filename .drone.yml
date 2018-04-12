@@ -3,7 +3,8 @@ pipeline:
     image: python:3.6
     commands:
       - pip install pipenv
-      - pipenv install
+      - pipenv install --system
+      - cd app
       - python app.py &
       - sleep 15
       - curl localhost:8000/health
