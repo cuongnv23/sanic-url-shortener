@@ -1,0 +1,15 @@
+pipeline:
+  test:
+    image: python:3.6
+    commands:
+      - pip install pipenv
+      - pipenv install
+      - python app &
+      - sleep 15
+      - curl localhost:8000/health
+    when:
+      branch: [master, cicd]
+
+services:
+  postgres:
+    image: cuongnv23/url-shortener-db
