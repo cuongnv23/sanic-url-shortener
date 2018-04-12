@@ -1,6 +1,10 @@
 pipeline:
   test:
     image: python:3.6
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=url
+      - POSTGRES_PASSWORD=secret
     commands:
       - pip install pipenv
       - cd app
