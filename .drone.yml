@@ -16,7 +16,7 @@ pipeline:
       branch: [master, cicd, develop]
 
   publish:
-    image: plugins/docker
+    image: plugins/docker:17.10
     repo: cuongnv23/url-shortener-app
     dockerfile: app/Dockerfile
     context: app
