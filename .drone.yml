@@ -22,7 +22,6 @@ pipeline:
     context: app
     secrets: [ docker_username, docker_password ]
     tag: latest
-    debug: true
 
 services:
   postgres:
