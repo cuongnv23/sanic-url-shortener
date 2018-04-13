@@ -26,7 +26,7 @@ pipeline:
       branch: [ master ]
 
   telegram:
-    image: appleboy/drone-telegram
+    image: appleboy/drone-telegram:1.3.3
     token: $TELEGRAM_TOKEN
     secrets: [ telegram_token ]
     to: cuongnv23
