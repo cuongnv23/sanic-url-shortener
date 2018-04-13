@@ -29,12 +29,7 @@ pipeline:
     image: appleboy/drone-telegram
     secrets: [ telegram_token, telegram_to ]
     message: >
-      {{#success build.status}}
-        build {{build.number}} succeeded.
-      {{else}}
-        build {{build.number}} failed.
-      {{/success}}
-    debug: true
+      build {{build.number}} {{build.status}} succeeded.
     when:
       status: [ success, failure ]
 
