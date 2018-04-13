@@ -27,9 +27,7 @@ pipeline:
 
   telegram:
     image: appleboy/drone-telegram:1.3.3
-    token: $TELEGRAM_TOKEN
-    secrets: [ telegram_token ]
-    to: cuongnv23
+    secrets: [ telegram_token, telegram_to ]
     message: >
       {{#success build.status}}
         build {{build.number}} succeeded.
