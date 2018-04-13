@@ -36,6 +36,7 @@ pipeline:
       {{else}}
         build {{build.number}} failed.
       {{/success}}
+    debug: true
 
 services:
   postgres:
