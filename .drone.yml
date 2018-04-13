@@ -15,6 +15,14 @@ pipeline:
     when:
       branch: [master, cicd, develop]
 
+  publish:
+    image: plugins/docker
+    repo: cuongnv23/url-shortener-app
+    dockerfile: app/Dockerfile
+    context: app
+    secrets: [ docker_username, docker_password ]
+    tag: latest
+
 services:
   postgres:
     image: cuongnv23/url-shortener-db
