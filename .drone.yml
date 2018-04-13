@@ -27,14 +27,13 @@ pipeline:
 
   telegram:
     image: appleboy/drone-telegram
-    token: $TELEGRAM_TOKEN
-    to: $TELEGRAM_TO
+    debug: true
     secrets: [ telegram_token, telegram_to ]
+    format: markdown
     message: >
-      build {{build.number}} {{build.status}} succeeded.
+      build {{build.number}} {{build.status}}.
     when:
       status: [ success, failure ]
-    debug: true
 
 services:
   postgres:
