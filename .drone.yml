@@ -26,7 +26,7 @@ pipeline:
       branch: [ master ]
 
   telegram:
-    image: appleboy/drone-telegram:1.3.3
+    image: appleboy/drone-telegram
     secrets: [ telegram_token, telegram_to ]
     message: >
       {{#success build.status}}
