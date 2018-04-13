@@ -13,7 +13,7 @@ pipeline:
       - sleep 5
       - "curl -s localhost:8000/health | grep 'true'"
     when:
-      branch: [master, cicd, develop]
+      branch: [master, cicd]
 
   publish:
     image: plugins/docker:17.10
@@ -26,7 +26,7 @@ pipeline:
       branch: [ master ]
 
   telegram:
-    image: appleboy/drone-telegram
+    image: appleboy/drone-telegram:1.3.3
     debug: true
     secrets: [ telegram_token, telegram_to ]
     format: markdown
