@@ -22,6 +22,8 @@ pipeline:
     context: app
     secrets: [ docker_username, docker_password ]
     tag: latest
+    when:
+      branch: [ master ]
 
 services:
   postgres:
