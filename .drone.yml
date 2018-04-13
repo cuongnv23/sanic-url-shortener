@@ -6,13 +6,12 @@ pipeline:
       - POSTGRES_USER=url
       - POSTGRES_PASSWORD=secret
     commands:
-      - apt-get update && apt-get install -y jq
       - pip install pipenv
       - cd app
       - pipenv install --system
       - python app.py &
       - sleep 5
-      - "[[ $(curl -s localhost:8000/health | jq '.db_access_ok') == 'true' ]]"
+      - "curl -s localhost:8000/health | grep 'true'"
     when:
       branch: [master, cicd]
 
