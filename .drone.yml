@@ -6,7 +6,7 @@ pipeline:
       - POSTGRES_USER=url
       - POSTGRES_PASSWORD=secret
     commands:
-      - apt-get install -y jq
+      - apt-get update && apt-get install -y jq
       - pip install pipenv
       - cd app
       - pipenv install --system
