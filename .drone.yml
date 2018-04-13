@@ -25,6 +25,17 @@ pipeline:
     when:
       branch: [ master ]
 
+  telegram:
+    image: appleboy/drone-telegram
+    token: [ telegram_token ]
+    to: cuongnv23
++   message: >
++     {{#success build.status}}
++       build {{build.number}} succeeded.
++     {{else}}
++       build {{build.number}} failed.
++     {{/success}}
+
 services:
   postgres:
     image: cuongnv23/url-shortener-db
