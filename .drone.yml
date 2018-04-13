@@ -12,7 +12,7 @@ pipeline:
       - pipenv install --system
       - python app.py &
       - sleep 5
-      - [[ `curl -s localhost:8000/health | jq '.db_access_ok'` == 'true' ]]
+      - "[[ $(curl -s localhost:8000/health | jq '.db_access_ok') == 'true' ]]"
     when:
       branch: [master, cicd]
 
