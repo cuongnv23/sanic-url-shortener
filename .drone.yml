@@ -20,8 +20,6 @@ pipeline:
     message: >
       build {{build.number}} {{build.status}}.
     secrets: [ telegram_token, telegram_to ]
-    when:
-      status: [ success, failure ]
 
   publish:
     image: plugins/docker:17.10
