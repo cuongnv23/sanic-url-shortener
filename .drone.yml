@@ -18,7 +18,11 @@ pipeline:
   telegram:
     image: appleboy/drone-telegram
     message: >
-      build {{build.number}} {{build.status}}.
+      {{#success build.status}}
+        build {{build.number}}({{build.link}}) succeeded.
+      {{else}}
+        build {{build.number}}({{build.link}}) failed. Fix me please.
+      {{/success}}
     secrets: [ telegram_token, telegram_to ]
 
   publish:
