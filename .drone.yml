@@ -43,7 +43,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     auto_tag: true
     when:
-      event: [ tag ]
+      event: [ push, tag ]
 
   release-db:
     image: plugins/docker:17.10
@@ -53,7 +53,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     auto_tag: true
     when:
-      event: [ tag ]
+      event: [ push, tag ]
 
   release-nginx:
     image: plugins/docker:17.10
@@ -62,7 +62,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     auto_tag: true
     when:
-      event: [ tag ]
+      event: [ push, tag ]
 
 services:
   postgres:
