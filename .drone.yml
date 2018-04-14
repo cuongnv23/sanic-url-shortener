@@ -33,7 +33,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     auto_tag: true
     when:
-      event: [ push, tag ]
+      event: [ tag ]
 
   release-db:
     image: plugins/docker:17.10
@@ -43,7 +43,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     auto_tag: true
     when:
-      event: [ push, tag ]
+      event: [ tag ]
 
   release-nginx:
     image: plugins/docker:17.10
@@ -52,7 +52,7 @@ pipeline:
     secrets: [ docker_username, docker_password ]
     auto_tag: true
     when:
-      event: [ push, tag ]
+      event: [ tag ]
 
   telegram:
     image: appleboy/drone-telegram
