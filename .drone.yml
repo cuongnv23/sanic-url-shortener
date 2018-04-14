@@ -15,16 +15,6 @@ pipeline:
     when:
       branch: [master, cicd]
 
-  telegram:
-    image: appleboy/drone-telegram
-    message: >
-      {{#success build.status}}
-        build {{build.number}}({{build.link}}) succeeded.
-      {{else}}
-        build {{build.number}}({{build.link}}) failed. Fix me please.
-      {{/success}}
-    secrets: [ telegram_token, telegram_to ]
-
   publish:
     image: plugins/docker:17.10
     repo: cuongnv23/url-shortener-app
@@ -47,7 +37,7 @@ pipeline:
 
   release-db:
     image: plugins/docker:17.10
-    repo: cuongnv23/url-shortener-app
+    repo: cuongnv23/url-shortener-db
     dockerfile: sql/Dockerfile
     context: sql
     secrets: [ docker_username, docker_password ]
@@ -57,12 +47,22 @@ pipeline:
 
   release-nginx:
     image: plugins/docker:17.10
-    repo: cuongnv23/url-shortener-app
+    repo: cuongnv23/url-shortener-nginx
     dockerfile: nginx.Dockerfile
     secrets: [ docker_username, docker_password ]
     auto_tag: true
     when:
       event: [ push, tag ]
+
+  telegram:
+    image: appleboy/drone-telegram
+    message: >
+      {{#success build.status}}
+        build {{build.number}}({{build.link}}) succeeded.
+      {{else}}
+        build {{build.number}}({{build.link}}) failed. Fix me please.
+      {{/success}}
+    secrets: [ telegram_token, telegram_to ]
 
 services:
   postgres:
