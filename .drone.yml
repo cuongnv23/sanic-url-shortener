@@ -35,6 +35,35 @@ pipeline:
     when:
       branch: [ master ]
 
+  release-app:
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-app
+    dockerfile: app/Dockerfile
+    context: app
+    secrets: [ docker_username, docker_password ]
+    auto_tag: true
+    when:
+      event: [ tag ]
+
+  release-db:
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-app
+    dockerfile: sql/Dockerfile
+    context: sql
+    secrets: [ docker_username, docker_password ]
+    auto_tag: true
+    when:
+      event: [ tag ]
+
+  release-nginx:
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-app
+    dockerfile: nginx.Dockerfile
+    secrets: [ docker_username, docker_password ]
+    auto_tag: true
+    when:
+      event: [ tag ]
+
 services:
   postgres:
     image: cuongnv23/url-shortener-db
