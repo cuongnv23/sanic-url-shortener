@@ -92,6 +92,7 @@ pipeline:
     secrets: [ ssh_host, ssh_password ]
     script:
       - cd /opt/deployment/test
+      - sudo docker-compose pull
       - sudo docker-compose stop
       - sudo docker-compose up --build -d
     when:
