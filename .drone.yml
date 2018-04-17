@@ -14,6 +14,7 @@ pipeline:
       - "curl -s localhost:8000/health | grep 'true'"
     when:
       branch: [master, cicd]
+      event: [ pull_request ]
 
   publish:
     image: plugins/docker:17.10
