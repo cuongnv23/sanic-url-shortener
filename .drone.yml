@@ -25,6 +25,8 @@ pipeline:
     tag: latest
     when:
       branch: [ master ]
+      event:
+        exclude: [ pull_request ]
 
   release-app:
     image: plugins/docker:17.10
@@ -64,6 +66,8 @@ pipeline:
         build {{build.number}}({{build.link}}) failed. Fix me please.
       {{/success}}
     secrets: [ telegram_token, telegram_to ]
+    when:
+      status: [ failure, success ]
 
 services:
   postgres:
