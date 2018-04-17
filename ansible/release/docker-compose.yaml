@@ -1,0 +1,32 @@
+version: '2'
+services:
+    nginx:
+       image: "cuongnv23/url-shortener-nginx:${NGINX_VERSION}"
+       container_name: url_prod_nginx
+       ports:
+            - "9999:80"
+       links:
+            - app
+       env_file:
+            - ./.env
+    app:
+        image: "cuongnv23/url-shortener-app:${APP_VERSION}"
+        container_name: url_prod_app
+        expose:
+            - "8000"
+        links:
+            - postgres
+        env_file:
+            - ./.env
+        depends_on:
+            - postgres
+
+    postgres:
+        image: "cuongnv23/url-shortener-db:${DB_VERSION}"
+        container_name: url_prod_db
+        env_file:
+            - ./.env
+        volumes:
+            - ./pg-prod:/var/lib/postgres/data/
+        expose:
+            - "5432"

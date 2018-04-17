@@ -1,0 +1,16 @@
+- name: Deploy url app to Production
+  hosts: droplet
+  gather_facts: no
+  user: debian
+  become: true
+  tasks:
+    - name: Sync file to remote server
+      synchronize:
+        src: release/
+        dest: /opt/deployment/prod/
+
+    - name: Deploy app to production using docker-compose
+      docker_service:
+        project_src: /opt/deployment/prod
+        build: yes
+        restarted: yes

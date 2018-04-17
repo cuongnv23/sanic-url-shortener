@@ -110,20 +110,6 @@ pipeline:
     when:
       event: [ tag ]
 
-  deploy-prod:
-    image: appleboy/drone-ssh
-    username: debian
-    secrets: [ ssh_host, ssh_password, prod_version ]
-    envs: [ prod_version ]
-    script:
-      - cd /opt/deployment/prod
-      - sudo docker-compose stop
-      - sudo sed -Ei "s/^PROD_TAG.+/PROD_TAG=${PROD_VERSION}/g" .env
-      - sudo docker-compose up --build -d
-    when:
-      event: [ deployment ]
-      environment: [ production ]
-
   telegram:
     image: appleboy/drone-telegram
     message: >
