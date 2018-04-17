@@ -96,6 +96,7 @@ pipeline:
       - sudo docker-compose up --build -d
     when:
       branch: [ master ]
+      event: [ push ]
 
   deploy-staging:
     image: appleboy/drone-ssh

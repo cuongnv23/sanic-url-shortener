@@ -18,6 +18,7 @@ db_name = os.getenv('POSTGRES_DB', 'redirects')
 
 DSN = 'postgres://{0}:{1}@{2}:{3}/{4}'.format(db_user, db_pass, db_host, db_port, db_name,)
 LATEST_LINKS = 5
+VERSION = '0.0.1'
 
 app = Sanic(__name__)
 
@@ -97,11 +98,14 @@ async def healthcheck(request):
             async with conn.transaction():
                 resp = await conn.fetchval('SELECT 1;')
                 if resp:
-                    return response.json({'db_access_ok': True})
+                    return response.json({'db_access_ok': True,
+                                          'version': VERSION})
                 else:
                     raise
     except Exception as e:
-        return response.json({'db_access_ok': False, 'info': str(e)})
+        return response.json({'db_access_ok': False,
+                              'info': str(e),
+                              'version': VERSION})
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', debug=os.getenv('DEBUG'))
