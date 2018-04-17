@@ -14,7 +14,7 @@ pipeline:
       - "curl -s localhost:8000/health | grep 'true'"
     when:
       branch: [ master ]
-      event: [ pull_request ]
+      event: [ push, pull_request ]
 
   release-app-latest:
     group: release-latest
