@@ -1,0 +1,74 @@
+pipeline:
+  test:
+    image: python:3.6
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_USER=url
+      - POSTGRES_PASSWORD=secret
+    commands:
+      - pip install pipenv
+      - cd app
+      - pipenv install --system
+      - python app.py &
+      - sleep 5
+      - "curl -s localhost:8000/health | grep 'true'"
+    when:
+      branch: [master, cicd]
+      event: [ pull_request ]
+
+  publish:
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-app
+    dockerfile: app/Dockerfile
+    context: app
+    secrets: [ docker_username, docker_password ]
+    tag: latest
+    when:
+      branch: [ master ]
+      event:
+        exclude: [ pull_request ]
+
+  release-app:
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-app
+    dockerfile: app/Dockerfile
+    context: app
+    secrets: [ docker_username, docker_password ]
+    auto_tag: true
+    when:
+      event: [ tag ]
+
+  release-db:
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-db
+    dockerfile: sql/Dockerfile
+    context: sql
+    secrets: [ docker_username, docker_password ]
+    auto_tag: true
+    when:
+      event: [ tag ]
+
+  release-nginx:
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-nginx
+    dockerfile: nginx.Dockerfile
+    secrets: [ docker_username, docker_password ]
+    auto_tag: true
+    when:
+      event: [ tag ]
+
+  telegram:
+    image: appleboy/drone-telegram
+    message: >
+      {{#success build.status}}
+        build {{build.number}}({{build.link}}) succeeded.
+      {{else}}
+        build {{build.number}}({{build.link}}) failed. Fix me please.
+      {{/success}}
+    secrets: [ telegram_token, telegram_to ]
+    when:
+      status: [ failure, success ]
+
+services:
+  postgres:
+    image: cuongnv23/url-shortener-db

@@ -1,0 +1,28 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: url-ingress
+spec:
+  backend:
+    serviceName: app
+    servicePort: 8000
+  rules:
+  - host: yaus.local
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: app
+          servicePort: 8000
+      - path: /static
+        backend:
+          serviceName: nginx
+          servicePort: 80
+      - path: /url
+        backend:
+          serviceName: app
+          servicePort: 8000
+      - path: /health
+        backend:
+          serviceName: app
+          servicePort: 8000
