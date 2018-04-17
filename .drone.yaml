@@ -16,7 +16,8 @@ pipeline:
       branch: [ master ]
       event: [ pull_request ]
 
-  publish:
+  release-app-latest:
+    group: release-latest
     image: plugins/docker:17.10
     repo: cuongnv23/url-shortener-app
     dockerfile: app/Dockerfile
@@ -28,8 +29,33 @@ pipeline:
       event:
         exclude: [ pull_request ]
 
-  release-app:
-    group: release
+  release-db-latest:
+    group: release-latest
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-db
+    dockerfile: sql/Dockerfile
+    context: app
+    secrets: [ docker_username, docker_password ]
+    tag: latest
+    when:
+      branch: [ master ]
+      event:
+        exclude: [ pull_request ]
+
+  release-nginx-latest:
+    group: release-latest
+    image: plugins/docker:17.10
+    repo: cuongnv23/url-shortener-nginx
+    dockerfile: nginx.Dockerfile
+    secrets: [ docker_username, docker_password ]
+    tag: latest
+    when:
+      branch: [ master ]
+      event:
+        exclude: [ pull_request ]
+
+  release-app-tag:
+    group: release-tag
     image: plugins/docker:17.10
     repo: cuongnv23/url-shortener-app
     dockerfile: app/Dockerfile
@@ -39,8 +65,8 @@ pipeline:
     when:
       event: [ tag ]
 
-  release-db:
-    group: release
+  release-db-tag:
+    group: release-tag
     image: plugins/docker:17.10
     repo: cuongnv23/url-shortener-db
     dockerfile: sql/Dockerfile
@@ -50,8 +76,8 @@ pipeline:
     when:
       event: [ tag ]
 
-  release-nginx:
-    group: release
+  release-nginx-tag:
+    group: release-tag
     image: plugins/docker:17.10
     repo: cuongnv23/url-shortener-nginx
     dockerfile: nginx.Dockerfile
@@ -59,6 +85,17 @@ pipeline:
     auto_tag: true
     when:
       event: [ tag ]
+
+  deploy-test:
+    image: appleboy/drone-ssh
+    username: debian
+    secrets: [ ssh_host, ssh_password ]
+    script:
+      - cd /opt/deployment/test
+      - sudo docker-compose stop
+      - sudo docker-compose up --build -d
+    when:
+      branch: [ master ]
 
   deploy-staging:
     image: appleboy/drone-ssh
