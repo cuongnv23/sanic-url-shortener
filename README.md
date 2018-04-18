@@ -12,7 +12,8 @@ $ docker-compose build
 $ docker-compose up
 ```
 
-Screenshot
+
+Screenshot of the app
 
 ![Screenshot](screenshots/screenshot.png?raw=true)
 
