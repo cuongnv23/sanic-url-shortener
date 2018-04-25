@@ -1,31 +1,41 @@
-version: '2'
+version: '3'
+
 services:
     nginx:
-        build:
-            context: .
-            dockerfile: nginx.Dockerfile
+        image: "cuongnv23/url-shortener-nginx:latest"
+        deploy:
+            replicas: 2
+            placement:
+                constraints: [node.role != manager]
+            resources:
+                limits:
+                    cpus: "0.5"
+                    memory: 50M
         ports:
             - "8888:80"
-        links:
-            - app
+
     app:
-        build:
-            context: ./app/
-        expose:
-            - "8000"
-        links:
-            - postgres
+        image: "cuongnv23/url-shortener-app:latest"
+        deploy:
+            replicas: 2
+            placement:
+                constraints: [node.role != manager]
         env_file:
             - ./.env
         depends_on:
             - postgres
 
     postgres:
-        build:
-            context: ./sql/
+        image: "cuongnv23/url-shortener-db:latest"
+        deploy:
+            placement:
+                constraints: [node.role == manager]
         env_file:
             - ./.env
         volumes:
-            - ./pg:/var/lib/postgres/data/
-        expose:
+            - data:/var/lig/postgres/data
+        ports:
             - "5432"
+
+volumes:
+    data:
