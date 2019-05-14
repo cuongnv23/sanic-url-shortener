@@ -8,6 +8,8 @@ import asyncio
 from sanic import Sanic, response
 from sanic_jinja2 import SanicJinja2
 
+from prometheus_client import monitor
+
 import asyncpg
 
 db_user = os.getenv('POSTGRES_USER')
@@ -108,4 +110,5 @@ async def healthcheck(request):
                               'version': VERSION})
 
 if __name__ == '__main__':
+    monitor(app).expose_endpoint()
     app.run(host='0.0.0.0', debug=os.getenv('DEBUG'))
