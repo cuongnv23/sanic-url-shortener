@@ -8,7 +8,7 @@ import asyncio
 from sanic import Sanic, response
 from sanic_jinja2 import SanicJinja2
 
-from prometheus_client import monitor
+from sanic_prometheus import monitor
 
 import asyncpg
 
