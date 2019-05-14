@@ -10,8 +10,7 @@ ADD . /opt/
 
 WORKDIR /opt/
 
-RUN pip install pipenv
-RUN pipenv install --system
+RUN pip install pipenv && pipenv install --system
 
 EXPOSE 8000
 
