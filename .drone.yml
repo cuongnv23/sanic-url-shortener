@@ -98,7 +98,6 @@ pipeline:
             from_secret: gcp_project
         GCP_ZONE:
             from_secret: gcp_zone
-
     script:
       - echo $GCP_SVA | base64 --decode > /tmp/sva.json
       - gcloud auth activate-service-account --key-file /tmp/sva.json
