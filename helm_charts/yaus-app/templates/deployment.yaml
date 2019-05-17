@@ -7,14 +7,14 @@ metadata:
 spec:
   selector:
     matchLabels:
-      name: {{ .Values.deployment.name }}
-      tier: {{ .Values.deployment.tier }}
+      name: {{ .Values.container.name }}
+      tier: {{ .Values.container.tier }}
   replicas: {{ .Values.deployment.replicas }}
   template:
     metadata:
       labels:
-        name: {{ .Values.deployment.name }}
-        tier: {{ .Values.deployment.tier }}
+        name: {{ .Values.container.name }}
+        tier: {{ .Values.container.tier }}
         version: {{ .Values.container.tag | default "latest" }}
       annotations:
         prometheus.io/scrape: "true"
