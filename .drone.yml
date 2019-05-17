@@ -23,7 +23,7 @@ pipeline:
     dockerfile: app/Dockerfile
     context: app
     secrets: [ docker_username, docker_password ]
-    tag: latest
+    tag: "${DRONE_COMMIT_SHA}"
     when:
       branch: [ master ]
       event:
@@ -89,12 +89,12 @@ pipeline:
   deploy-test:
     image: cuongnv23/kubectl:latest
     secrets: [ gke_cluster, gcp_project, gcp_zone, gcp_service_account ]
-    script:
-      - echo $${GCP_SERVICE_ACCOUNT}} | base64 --decode > /tmp/sva.json
+    commands:
+      - echo $${GCP_SERVICE_ACCOUNT} | base64 --decode > /tmp/sva.json
       - gcloud auth activate-service-account --key-file /tmp/sva.json
       - gcloud container clusters get-credentials $${GKE_CLUSTER} --zone $${GCP_ZONE} --project $${GCP_PROJECT}
       - helm init --upgrade --service-account=tiller --wait
-      - helm upgrade --install yaus-app app/helm_charts/yaus-app/ --debug
+      - helm upgrade --install yaus-app helm_charts/yaus-app/ --set container.tag=$${DRONE_COMMIT_SHA} --debug
     when:
       branch: [ master ]
       event: [ push ]
@@ -102,11 +102,11 @@ pipeline:
   deploy-staging:
     image: cuongnv23/kubectl:latest
     secrets: [ gke_cluster, gcp_project, gcp_zone, gcp_service_account ]
-    script:
-      - echo $GCP_SVA | base64 --decode > /tmp/sva.json
+    commands:
+      - echo $${GCP_SERVICE_ACCOUNT} | base64 --decode > /tmp/sva.json
       - gcloud auth activate-service-account --key-file /tmp/sva.json
-      - gcloud container clusters get-credentials $GKE_CLUSTER --zone $GCP_ZONE --project $GCP_PROJECT
-      - helm upgrade --install yaus-app app/helm_charts/yaus-app/ --set deployment.version=${DRONE_TAG}  --debug
+      - gcloud container clusters get-credentials $${GKE_CLUSTER} --zone $${GCP_ZONE} --project $${GCP_PROJECT}
+      - helm upgrade --install yaus-app helm_charts/yaus-app/ --set container.tag=$${DRONE_TAG}  --debug
     when:
       event: [ tag ]
 
