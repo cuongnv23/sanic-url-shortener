@@ -9,6 +9,7 @@ deployment:
 
 container:
   name: app
+  tier: backend
   port_name: sanic
   port: 8000
   image: "cuongnv23/url-shortener-app"

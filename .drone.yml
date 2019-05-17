@@ -89,7 +89,7 @@ pipeline:
   deploy-test:
     image: cuongnv23/kubectl:latest
     secrets: [ gke_cluster, gcp_project, gcp_zone, gcp_service_account ]
-    script:
+    commands:
       - echo $${GCP_SERVICE_ACCOUNT}} | base64 --decode > /tmp/sva.json
       - gcloud auth activate-service-account --key-file /tmp/sva.json
       - gcloud container clusters get-credentials $${GKE_CLUSTER} --zone $${GCP_ZONE} --project $${GCP_PROJECT}
@@ -102,7 +102,7 @@ pipeline:
   deploy-staging:
     image: cuongnv23/kubectl:latest
     secrets: [ gke_cluster, gcp_project, gcp_zone, gcp_service_account ]
-    script:
+    commands:
       - echo $GCP_SVA | base64 --decode > /tmp/sva.json
       - gcloud auth activate-service-account --key-file /tmp/sva.json
       - gcloud container clusters get-credentials $GKE_CLUSTER --zone $GCP_ZONE --project $GCP_PROJECT
