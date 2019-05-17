@@ -94,20 +94,19 @@ pipeline:
       - gcloud auth activate-service-account --key-file /tmp/sva.json
       - gcloud container clusters get-credentials $${GKE_CLUSTER} --zone $${GCP_ZONE} --project $${GCP_PROJECT}
       - helm init --upgrade --service-account=tiller --wait
-      - helm list
+      - helm upgrade --install yaus-app app/helm_charts/yaus-app/ --debug
     when:
       branch: [ master ]
       event: [ push ]
 
   deploy-staging:
-    image: appleboy/drone-ssh
-    username: debian
-    secrets: [ ssh_host, ssh_password ]
+    image: cuongnv23/kubectl:latest
+    secrets: [ gke_cluster, gcp_project, gcp_zone, gcp_service_account ]
     script:
-      - cd /opt/deployment/staging
-      - sudo docker-compose stop
-      - sudo sed -Ei "s/^STAGING_TAG.+/STAGING_TAG=${DRONE_TAG}/g" .env
-      - sudo docker-compose up --build -d
+      - echo $GCP_SVA | base64 --decode > /tmp/sva.json
+      - gcloud auth activate-service-account --key-file /tmp/sva.json
+      - gcloud container clusters get-credentials $GKE_CLUSTER --zone $GCP_ZONE --project $GCP_PROJECT
+      - helm upgrade --install yaus-app app/helm_charts/yaus-app/ --set deployment.version=${DRONE_TAG}  --debug
     when:
       event: [ tag ]
 

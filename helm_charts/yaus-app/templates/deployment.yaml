@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployment.name }} 
+  annotations:
+    prometheus.io/scrape: 'true'
+spec:
+  selector:
+    matchLabels:
+      name: {{ .Values.deployment.name }}
+      tier: {{ .Values.deployment.tier }}
+  replicas: {{ .Values.deployment.replicas }}
+  template:
+    metadata:
+      labels:
+        name: {{ .Values.deployment.name }}
+        tier: {{ .Values.deployment.tier }}
+        version: {{ .Values.container.tag | default "latest" }}
+      annotations:
+        prometheus.io/scrape: "true"
+    spec:
+      containers:
+        - name: {{ .Values.container.name }}
+          image: {{ .Values.container.image }}:{{ .Values.container.tag | default "latest" }}
+          imagePullPolicy: {{ .Values.container.image_pull_policy }}
+          ports:
+            - name: {{ .Values.container.port_name }}
+              containerPort: {{ .Values.container.port}}
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: {{ .Values.container.port }}
+            initialDelaySeconds: 3
+            periodSeconds: 3
+          env:
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: app-secret
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: POSTGRES_DB
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: app-config
+                  key: POSTGRES_HOST
