@@ -3,7 +3,7 @@ kind: Service
 metadata:
   name: {{ .Values.service.name }}
   labels:
-    app: {{ .Values.deployment.name }}
+    name: {{ .Values.deployment.name }}
     tier: {{ .Values.deployment.tier }}
   annotations:
     prometheus.io/scrape: "true"
@@ -18,5 +18,5 @@ spec:
       #      targetPort: {{ .Values.container.port }}
       #      protocol: TCP
   selector:
-    app: {{ .Values.deployment.name }}
+    name: {{ .Values.deployment.name }}
     tier: {{ .Values.deployment.tier }}
