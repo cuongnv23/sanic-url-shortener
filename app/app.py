@@ -6,7 +6,9 @@ import logging
 import asyncio
 
 from sanic import Sanic, response
+from sanic.exceptions import ServerError
 from sanic_jinja2 import SanicJinja2
+
 
 from sanic_prometheus import monitor
 
@@ -92,6 +94,10 @@ async def redirect(request, url):
     except (asyncio.TimeoutError, ConnectionRefusedError):
         await connect_db(dsn=DSN)
 
+
+@app.route('/errors')
+async def raise_exception(request):
+    raise ServerError("Ooops, sh*t happened!", status_code=500)
 
 @app.route('/health')
 async def healthcheck(request):
