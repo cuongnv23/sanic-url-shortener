@@ -1,0 +1,22 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name }}
+  labels:
+    app: {{ .Values.deployment.name }}
+    tier: {{ .Values.deployment.tier }}
+  annotations:
+    prometheus.io/scrape: "true"
+spec:
+  ports:
+    - port: {{ .Values.container.port }}
+      name: {{ .Values.container.port_name}}
+      targetPort: {{ .Values.container.port }}
+      protocol: TCP
+      #    - port: 9102
+      #      name: prometheus
+      #      targetPort: {{ .Values.container.port }}
+      #      protocol: TCP
+  selector:
+    app: {{ .Values.deployment.name }}
+    tier: {{ .Values.deployment.tier }}
