@@ -94,7 +94,7 @@ pipeline:
       - gcloud auth activate-service-account --key-file /tmp/sva.json
       - gcloud container clusters get-credentials $${GKE_CLUSTER} --zone $${GCP_ZONE} --project $${GCP_PROJECT}
       - helm init --upgrade --service-account=tiller --wait
-      - helm upgrade --install yaus-app helm_charts/yaus-app/ --set deployment.version=$${DRONE_COMMIT_SHA} --debug
+      - helm upgrade --install yaus-app helm_charts/yaus-app/ --set container.tag=$${DRONE_COMMIT_SHA} --debug
     when:
       branch: [ master ]
       event: [ push ]
@@ -106,7 +106,7 @@ pipeline:
       - echo $${GCP_SERVICE_ACCOUNT} | base64 --decode > /tmp/sva.json
       - gcloud auth activate-service-account --key-file /tmp/sva.json
       - gcloud container clusters get-credentials $${GKE_CLUSTER} --zone $${GCP_ZONE} --project $${GCP_PROJECT}
-      - helm upgrade --install yaus-app helm_charts/yaus-app/ --set deployment.version=$${DRONE_TAG}  --debug
+      - helm upgrade --install yaus-app helm_charts/yaus-app/ --set container.tag=$${DRONE_TAG}  --debug
     when:
       event: [ tag ]
 
