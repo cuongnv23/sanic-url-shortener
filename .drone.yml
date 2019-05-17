@@ -23,7 +23,7 @@ pipeline:
     dockerfile: app/Dockerfile
     context: app
     secrets: [ docker_username, docker_password ]
-    tag: latest
+    tag: "${DRONE_COMMIT_SHA}"
     when:
       branch: [ master ]
       event:
@@ -94,7 +94,7 @@ pipeline:
       - gcloud auth activate-service-account --key-file /tmp/sva.json
       - gcloud container clusters get-credentials $${GKE_CLUSTER} --zone $${GCP_ZONE} --project $${GCP_PROJECT}
       - helm init --upgrade --service-account=tiller --wait
-      - helm upgrade --install yaus-app helm_charts/yaus-app/ --debug
+      - helm upgrade --install yaus-app helm_charts/yaus-app/ --set deployment.version=$${DRONE_COMMIT_SHA} --debug
     when:
       branch: [ master ]
       event: [ push ]
