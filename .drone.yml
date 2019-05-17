@@ -90,14 +90,14 @@ pipeline:
     image: cuongnv23/kubectl:latest
     secrets: [ gke_cluster, gcp_project, gcp_zone, gcp_service_account ]
     environment:
-        GCP_SVA:
-            from_secret: gke_service_account
-        GKE_CLUSTER:
-            from_secret: gke_cluster
-        GCP_PROJECT:
-            from_secret: gcp_project
-        GCP_ZONE:
-            from_secret: gcp_zone
+      GCP_SVA:
+        from_secret: gke_service_account
+      GKE_CLUSTER:
+        from_secret: gke_cluster
+      GCP_PROJECT:
+        from_secret: gcp_project
+      GCP_ZONE:
+        from_secret: gcp_zone
 
     script:
       - echo $GCP_SVA | base64 --decode > /tmp/sva.json
@@ -113,14 +113,14 @@ pipeline:
     image: cuongnv23/kubectl:latest
     secrets: [ gke_cluster, gcp_project, gcp_zone, gcp_service_account ]
     environment:
-        GCP_SVA:
-            from_secret: gke_service_account
-        GKE_CLUSTER:
-            from_secret: gke_cluster
-        GCP_PROJECT:
-            from_secret: gcp_project
-        GCP_ZONE:
-            from_secret: gcp_zone
+      GCP_SVA:
+        from_secret: gke_service_account
+      GKE_CLUSTER:
+        from_secret: gke_cluster
+      GCP_PROJECT:
+        from_secret: gcp_project
+      GCP_ZONE:
+        from_secret: gcp_zone
 
     script:
       - echo $GCP_SVA | base64 --decode > /tmp/sva.json
