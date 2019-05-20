@@ -115,7 +115,7 @@ pipeline:
       - helm init --upgrade --service-account=tiller --wait
       - helm plugin install https://github.com/ContainerSolutions/helm-monitor
       - helm upgrade --install yaus-app helm_charts/yaus-app/ --set container.tag=$${DRONE_TAG}  --debug
-      - helm monitor -v prometheus --timeout 60 --prometheus=http://104.154.214.245 yaus-app 'rate(sanic_request_count_total{job="kubernetes-pods",tier="backend", http_status=~"^5.*$"}[1m]) > 0.01'
+      - helm monitor -v prometheus --timeout 60 --prometheus=http://104.154.214.245 yaus-app 'sum(rate(sanic_request_count_total{job="kubernetes-pods",tier="backend", http_status=~"^5.*$"}[1m])) > 0.1'
     when:
       event: [ tag ]
 
