@@ -102,6 +102,9 @@ pipeline:
   deploy-staging:
     image: cuongnv23/kubectl:latest
     secrets: [ gke_cluster, gcp_project, gcp_zone, gcp_service_account, prometheus_server ]
+    environment:
+      - PROMETHEUS_SERVER=104.154.214.245
+ 
     commands:
       - echo $${GCP_SERVICE_ACCOUNT} | base64 --decode > /tmp/sva.json
       - gcloud auth activate-service-account --key-file /tmp/sva.json
