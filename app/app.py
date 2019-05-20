@@ -22,7 +22,7 @@ db_name = os.getenv('POSTGRES_DB', 'redirects')
 
 DSN = 'postgres://{0}:{1}@{2}:{3}/{4}'.format(db_user, db_pass, db_host, db_port, db_name,)
 LATEST_LINKS = 5
-VERSION = '0.0.2'
+VERSION = os.getenv('VERSION', 'latest') 
 
 app = Sanic(__name__)
 

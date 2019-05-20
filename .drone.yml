@@ -5,6 +5,7 @@ pipeline:
       - POSTGRES_HOST=postgres
       - POSTGRES_USER=url
       - POSTGRES_PASSWORD=secret
+      - VERSION=${DRONE_COMMIT_SHA}
     commands:
       - pip install pipenv
       - cd app
@@ -24,6 +25,8 @@ pipeline:
     context: app
     secrets: [ docker_username, docker_password ]
     tag: "${DRONE_COMMIT_SHA}"
+    build_args:
+      - BUILD_VERSION=${DRONE_COMMIT_SHA}
     when:
       branch: [ master ]
       event:
@@ -62,6 +65,8 @@ pipeline:
     context: app
     secrets: [ docker_username, docker_password ]
     auto_tag: true
+    build_args:
+      - BUILD_VERSION=${DRONE_TAG}
     when:
       event: [ tag ]
 
