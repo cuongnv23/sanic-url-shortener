@@ -15,7 +15,7 @@ $ docker-compose up
 
 Screenshot of the app
 
-![Screenshot](screenshots/screenshot.png?raw=true)
+![Screenshot](doc/images/screenshot.png?raw=true)
 
 
 ### Development
