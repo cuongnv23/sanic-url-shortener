@@ -3,7 +3,7 @@ import random
 import string
 import logging
 
-import asyncio ########################################3
+import asyncio
 
 from sanic import Sanic, response
 from sanic.exceptions import ServerError
