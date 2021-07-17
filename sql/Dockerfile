@@ -1,4 +1,4 @@
-FROM postgres:9.6
+FROM postgres:12.7
 
 ENV POSTGRES_PASSWORD 'secret'
 ENV POSTGRES_USER 'url'
