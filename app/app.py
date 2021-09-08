@@ -20,9 +20,10 @@ db_host = os.getenv('POSTGRES_HOST', 'localhost')
 db_port = os.getenv('POSTGRES_PORT', 5432)
 db_name = os.getenv('POSTGRES_DB', 'redirects')
 
-DSN = 'postgres://{0}:{1}@{2}:{3}/{4}'.format(db_user, db_pass, db_host, db_port, db_name,)
+DSN = 'postgres://{0}:{1}@{2}:{3}/{4}'.format(db_user, db_pass,
+                                              db_host, db_port, db_name,)
 LATEST_LINKS = 5
-VERSION = os.getenv('VERSION', 'latest') 
+VERSION = os.getenv('VERSION', 'latest')
 
 app = Sanic(__name__)
 
@@ -33,7 +34,8 @@ log = logging.getLogger('url')
 
 
 async def generate_url(length=6) -> str:
-    return ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(length))
+    return ''.join(random.choice(string.ascii_letters + string.digits)
+                   for _ in range(length))
 
 
 async def connect_db(dsn: str, retries=5):
@@ -42,7 +44,8 @@ async def connect_db(dsn: str, retries=5):
             pool = await asyncpg.create_pool(dsn=dsn)
             return pool
         except Exception as e:
-            log.error('Unable to connect db. Message: %s. Retries = %d' % (e, retries))
+            log.error('Unable to connect db. '
+                      'Message: %s. Retries = %d' % (e, retries))
             await asyncio.sleep(3)
             await connect_db(dsn=dsn, retries=retries - 1)
     log.error('Unable to connect db. Stop.')
@@ -62,12 +65,19 @@ async def index(request):
             async with conn.transaction():
                 if request.method == 'POST':
                     original_url = request.form.get('url')
-                    short_url = await conn.fetchval('SELECT short_url FROM redirects WHERE original_url = $1;', original_url)
+                    short_url = await conn.fetchval(
+                        'SELECT short_url FROM redirects '
+                        'WHERE original_url = $1;', original_url)
                     if not short_url:
                         short_url = await generate_url()
-                        await conn.execute('INSERT INTO redirects (short_url, original_url) VALUES ($1, $2);', short_url, original_url)
-                    return response.redirect(app.url_for('result', short_url=short_url))
-                latest_links = await conn.fetch('SELECT * FROM redirects ORDER BY created_at DESC LIMIT $1;', LATEST_LINKS)
+                        await conn.execute(
+                            'INSERT INTO redirects (short_url, original_url) '
+                            'VALUES ($1, $2);', short_url, original_url)
+                    return response.redirect(app.url_for(
+                        'result', short_url=short_url))
+                latest_links = await conn.fetch(
+                    'SELECT * FROM redirects ORDER BY '
+                    'created_at DESC LIMIT $1;', LATEST_LINKS)
                 return jinja.render('index.html', request, links=latest_links)
     except (asyncio.TimeoutError, ConnectionRefusedError):
         await connect_db(dsn=DSN)
@@ -84,7 +94,9 @@ async def redirect(request, url):
         pool = app.pool
         async with pool.acquire() as conn:
             async with conn.transaction():
-                original_url = await conn.fetchval('SELECT original_url FROM redirects WHERE short_url = $1;', url)
+                original_url = await conn.fetchval(
+                    'SELECT original_url FROM redirects WHERE short_url = $1;',
+                    url)
                 if not original_url:
                     return response.json({'original_url': 'not found'})
         if 'http' not in original_url:
@@ -98,6 +110,7 @@ async def redirect(request, url):
 @app.route('/errors')
 async def raise_exception(request):
     raise ServerError("Ooops, sh*t happened!", status_code=500)
+
 
 @app.route('/health')
 async def healthcheck(request):

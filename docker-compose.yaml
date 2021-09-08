@@ -1,16 +1,15 @@
 version: '2'
 services:
     nginx:
-        build:
-            context: .
-            dockerfile: nginx.Dockerfile
+        image: namptit307/sanic_nginx:$IMAGE_TAG
+        container_name: sanic_nginx_con
         ports:
             - "8888:80"
         links:
             - app
     app:
-        build:
-            context: ./app/
+        image: namptit307/sanic_url:$IMAGE_TAG
+        container_name: sanic_url_con
         expose:
             - "8000"
         links:
@@ -19,10 +18,9 @@ services:
             - ./.env
         depends_on:
             - postgres
-
     postgres:
-        build:
-            context: ./sql/
+        image: namptit307/sanic_db:$IMAGE_TAG
+        container_name: sanic_db_con
         env_file:
             - ./.env
         volumes:

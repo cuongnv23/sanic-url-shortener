@@ -1,5 +1,7 @@
 ### URL shortener
 
+Test trigger
+
 Another URL shoterner app.
 
 This is an example of using [Sanic](https://github.com/channelcat/sanic) with [asyncpg](https://github.com/MagicStack/asyncpg) - a fast PostgreSQL client lib for asyncio.
@@ -15,7 +17,7 @@ $ docker-compose up
 
 Screenshot of the app
 
-![Screenshot](screenshots/screenshot.png?raw=true)
+![Screenshot](doc/images/screenshot.png?raw=true)
 
 
 ### Development
